@@ -6,7 +6,7 @@ window.geometry("500x500+10+10")
 window.config(bg= "#345")
 
 canvas = Canvas(window, height=250, width=250, bg="#fff")
-canvas.place(x=125,y=125)
+canvas.place(x=125,y=125) #new stuff to see if git saves it
 
 #creating a rectangle in format topleftxcoord,topleftycoord,bottomrightxcoord,bottomrightycoord
 canvas.create_rectangle(10,10,100,100,outline="Black",fill="Grey")
