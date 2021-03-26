@@ -37,6 +37,7 @@ entry1=Entry(window, font=entry1Font, bd=2, bg="Dark Grey", fg="Dark Red")
 entry1.place(x=150,y=320)
 
 
+
 window.mainloop()
 ##
 # IMPORTANT - save a file as .pyw instead of .py to prevent the command line from showing up when running in an executable
