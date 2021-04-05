@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>913fae34-60f1-4e97-8620-a0e305671e52</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>unlimited delete.py</StartupFile>
+    <StartupFile>tests\unlimited delete.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,10 +22,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Canvas place with classes.py" />
-    <Compile Include="TKInter Basic place%28%29.py" />
-    <Compile Include="TKInter_Repo.py" />
-    <Compile Include="TKInter_Basic canvas%28%29.py" />
-    <Compile Include="unlimited delete.py" />
+    <Compile Include="basic class structures\TKInter Basic place%28%29.py" />
+    <Compile Include="basic class structures\TKInter_Basic canvas%28%29.py" />
+    <Compile Include="tests\unlimited delete.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="basic class structures\" />
+    <Folder Include="tests\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
