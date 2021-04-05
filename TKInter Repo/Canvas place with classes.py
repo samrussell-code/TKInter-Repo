@@ -1,6 +1,7 @@
 from tkinter import *
 from functools import partial
 import os
+import pickle
 
 
 class MainWindow(Tk):
@@ -28,6 +29,9 @@ class MainWindow(Tk):
 
         deleteButton=Button(self,text="Delete",font=mainFont,command=self.deleteSquare)
         deleteButton.place(x=1000,y=120)
+
+        saveButton=Button(self,text="SAve",font=mainFont,command=self.saveQuit)
+        saveButton.place(x=1000,y=200)
 
         self.squareSize=50
         sizeLabel=Label(self, text="Current Size Is "+str(self.squareSize)+" Points",font=mainFont,relief="groove")
@@ -69,6 +73,11 @@ class MainWindow(Tk):
 
     def deleteCanvas(self):
         self.dynCanvas.delete("all")
+
+    def saveQuit(self):
+        with open("savedata.txt", "wb") as file:
+            pickle.dump(self.squareDict, file)
+        quit()
 
 class Square():
     def __init__(self,ID,canvas,x,y,size):
