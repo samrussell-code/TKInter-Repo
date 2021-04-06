@@ -28,6 +28,9 @@ class MainWindow(Tk):
         saveButton=Button(self,text="Save/Quit",font=mainFont,command=self.saveQuit)
         saveButton.place(x=1000,y=200)
 
+        loadButton=Button(self,text="Load",font=mainFont,command=self.loadData)
+        loadButton.place(x=1000,y=100)
+
         self.squareSize=50
         sizeLabel=Label(self, text="Current Size Is "+str(self.squareSize)+" Points",font=mainFont,relief="groove")
         sizeLabel.place(x=1000,y=250)
@@ -38,25 +41,22 @@ class MainWindow(Tk):
         dynCanvas.bind("<Button-3>",self.tryDelete)#new subroutine called trydelete
         dynCanvas.place(x=25,y=25)
         self.dynCanvas=dynCanvas
+        
+        self.saveData=saveData
 
+    def loadData(self):
         if os.path.isfile("savedata.txt"):
             with open("savedata.txt", "rb")as file:
                 self.finalSave=pickle.loads(file.read())
-                print(self.finalSave)
+                self.deleteCanvas()
                 for item in self.finalSave:
-                    x=item[0]
-                    y=item[1]
-                    self.squareSize=item[2]
+                    x=item[0];y=item[1];self.squareSize=item[2]
                     self.info.insert(int(self.objCount), [x,y,self.squareSize])
                     self.objCount=int(self.objCount);self.objCount+=1;self.objCount=str(self.objCount)
-                    self.saveData=saveData
+
                     self.saveData[self.objCount]=Square(self.objCount,self.dynCanvas,x,y,self.squareSize)#this bit tries to save the square  
                     size=self.squareSize
                     self.dynCanvas.create_rectangle(x-size,y-size,x+size,y+size,fill="#444554")
-                    print(self.info)
-
-        else:
-            self.saveData=saveData
 
     def callCreate(self,event):
         self.info.insert(int(self.objCount), [event.x,event.y,self.squareSize])
@@ -64,8 +64,6 @@ class MainWindow(Tk):
         self.saveData[self.objCount]=Square(self.objCount,self.dynCanvas,event.x,event.y,self.squareSize)#this bit tries to save the square  
         x=event.x;y=event.y;size=self.squareSize
         self.dynCanvas.create_rectangle(x-size,y-size,x+size,y+size,fill="#444554")
-        print(self.info)
-
 
     def tryDelete(self,event):
         squareFound=False
@@ -98,8 +96,6 @@ class MainWindow(Tk):
     def saveQuit(self):
         if len(self.saveData)>0:
             with open("savedata.txt", "wb") as file:
-                print(self.info)
-                print(self.saveData.keys())
                 finalSave=[]
                 for x in self.saveData.keys():
                     item=int(x)-1
@@ -115,7 +111,6 @@ class Square():
         self.pos=x,y
         self.size=size
         self.canvas=canvas
-
 
 
 class SizeWindow(Toplevel):
