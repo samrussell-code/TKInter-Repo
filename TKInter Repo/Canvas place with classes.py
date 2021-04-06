@@ -8,16 +8,14 @@ class MainWindow(Tk):
     def __init__(self):
         super().__init__()
         self.title("Dynamic Canvas")
-        self.geometry("1280x1000+10+10")
+        self.geometry("1280x1000+390+10")
         self.config(bg="#424B54")
 
-        squareDict={}
-        if os.path.isfile("savedata.txt"):
-            with open("savedata.txt", "rb")as file:
-                self.squareDict=pickle.loads(file.read())
-        else:
-            self.squareDict={}
-        objCount=str("0")
+        saveData={}
+        info=[]
+        self.info=info
+
+        objCount="0"
         self.objCount=objCount
         
         mainFont=font=("Comic Sans MS",15)
@@ -27,10 +25,7 @@ class MainWindow(Tk):
         clearButton=Button(self,text="Clear",font=mainFont,command=self.deleteCanvas)
         clearButton.place(x=1000,y=750)
 
-        deleteButton=Button(self,text="Delete",font=mainFont,command=self.deleteSquare)
-        deleteButton.place(x=1000,y=120)
-
-        saveButton=Button(self,text="SAve",font=mainFont,command=self.saveQuit)
+        saveButton=Button(self,text="Save/Quit",font=mainFont,command=self.saveQuit)
         saveButton.place(x=1000,y=200)
 
         self.squareSize=50
@@ -44,24 +39,47 @@ class MainWindow(Tk):
         dynCanvas.place(x=25,y=25)
         self.dynCanvas=dynCanvas
 
-    def callCreate(self,event):
-        print(self.dynCanvas)
-        self.squareDict[self.objCount]=Square(self.objCount,self.dynCanvas,event.x,event.y,self.squareSize)
-        x=event.x;y=event.y;size=self.squareSize
-        self.dynCanvas.create_rectangle(x-size,y-size,x+size,y+size,fill="#3993DD")
-        self.objCount=int(self.objCount);self.objCount+=1;self.objCount=str(self.objCount)
+        if os.path.isfile("savedata.txt"):
+            with open("savedata.txt", "rb")as file:
+                self.finalSave=pickle.loads(file.read())
+                print(self.finalSave)
+                for item in self.finalSave:
+                    x=item[0]
+                    y=item[1]
+                    self.squareSize=item[2]
+                    self.info.insert(int(self.objCount), [x,y,self.squareSize])
+                    self.objCount=int(self.objCount);self.objCount+=1;self.objCount=str(self.objCount)
+                    self.saveData=saveData
+                    self.saveData[self.objCount]=Square(self.objCount,self.dynCanvas,x,y,self.squareSize)#this bit tries to save the square  
+                    size=self.squareSize
+                    self.dynCanvas.create_rectangle(x-size,y-size,x+size,y+size,fill="#444554")
+                    print(self.info)
 
-    def deleteSquare(self):
-        print(self.dynCanvas.coords(self.objCount))
-        self.dynCanvas.delete(int(self.objCount))
+        else:
+            self.saveData=saveData
+
+    def callCreate(self,event):
+        self.info.insert(int(self.objCount), [event.x,event.y,self.squareSize])
+        self.objCount=int(self.objCount);self.objCount+=1;self.objCount=str(self.objCount)
+        self.saveData[self.objCount]=Square(self.objCount,self.dynCanvas,event.x,event.y,self.squareSize)#this bit tries to save the square  
+        x=event.x;y=event.y;size=self.squareSize
+        self.dynCanvas.create_rectangle(x-size,y-size,x+size,y+size,fill="#444554")
+        print(self.info)
+
 
     def tryDelete(self,event):
-        topx,topy,bottomx,bottomy=self.dynCanvas.coords(self.objCount)#gets coords of most recent square
-        #coords is a tuple so we need to extract the correct information from it
-        #in format topx,topy,bottomx,bottomy
-        print("event.x",event.x,"event.y",event.y,"topx",topx,"topy",topy,"bottomx",bottomx,"bottomy",bottomy)
-        if event.x>topx and event.x<bottomx and event.y>topy and event.y<bottomy:
-            self.dynCanvas.delete(int(self.objCount))
+        squareFound=False
+        for ID in reversed(self.saveData.keys()):#searches the dictionary keys in reverse order (from newest to oldest)
+            #since only one item can be deleted at a time and it is always the first item to be found this means the
+            #newest items (the ones on top of the item stack) will be deleted instead of the item behind it when two squares overlap
+            topx,topy,bottomx,bottomy=self.dynCanvas.coords(self.saveData[ID].ID)
+            if event.x>topx and event.x<bottomx and event.y>topy and event.y<bottomy:
+                self.dynCanvas.delete(self.saveData[ID].ID)
+                toBeRemoved=ID;squareFound=True
+                break
+        if squareFound==True:
+            print("Deleting",toBeRemoved,"...")
+            del self.saveData[toBeRemoved]
         
     def openWindow(self):
         window=SizeWindow(self)
@@ -73,10 +91,22 @@ class MainWindow(Tk):
 
     def deleteCanvas(self):
         self.dynCanvas.delete("all")
+        self.saveData={}
+        self.objCount="0"
+        self.info=[]
 
     def saveQuit(self):
-        with open("savedata.txt", "wb") as file:
-            pickle.dump(self.squareDict, file)
+        if len(self.saveData)>0:
+            with open("savedata.txt", "wb") as file:
+                print(self.info)
+                print(self.saveData.keys())
+                finalSave=[]
+                for x in self.saveData.keys():
+                    item=int(x)-1
+                    finalSave.insert(item, self.info[item])
+                pickle.dump(finalSave, file)
+        else:
+            os.remove("savedata.txt")
         quit()
 
 class Square():
@@ -85,7 +115,6 @@ class Square():
         self.pos=x,y
         self.size=size
         self.canvas=canvas
-        print(self.ID,self.pos,self.size,self.canvas)
 
 
 
