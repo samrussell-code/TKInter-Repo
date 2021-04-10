@@ -2,8 +2,6 @@ from tkinter import *
 from functools import partial
 import os
 import pickle
-import time #temp
-
 
 class MainWindow(Tk):
     def __init__(self):
@@ -85,11 +83,9 @@ class MainWindow(Tk):
                 break
         if squareFound==True:
             print("Deleting",toBeRemoved,"...")
-
         
     def openWindow(self):
         window=SizeWindow(self)
-
 
     def changeSize(self,newSize):
         self.squareSize=int(newSize)
@@ -118,10 +114,8 @@ class MainWindow(Tk):
 
 class Square():
     def __init__(self,ID,canvas,x,y,size):
-        self.ID=ID
-        self.pos=x,y
-        self.size=size
-        self.canvas=canvas
+        self.ID,self.pos,self.size,self.canvas=ID,(x,y),size,canvas
+
 
 class SizeWindow(Toplevel):
     def __init__(self,parent):
