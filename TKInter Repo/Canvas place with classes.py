@@ -81,10 +81,10 @@ class MainWindow(Tk):
         
     def openWindow(self):
         window=SizeWindow(self)
-        window.grab_set()
+
 
     def changeSize(self,newSize):
-        self.squareSize=newSize
+        self.squareSize=int(newSize)
         self.sizeLabel['text'] = "Current Size Is "+str(self.squareSize)+" Points"
 
     def deleteCanvas(self):
@@ -112,23 +112,28 @@ class Square():
         self.size=size
         self.canvas=canvas
 
-
 class SizeWindow(Toplevel):
     def __init__(self,parent):
         super().__init__(parent)
         self.title("Modify Size")
-        self.geometry("20x210+200+20")
+        self.geometry("130x260+200+20")
         self.config(bg="#424B54")
 
         #partial is useful for calling a method and its arguments in one pair of brackets
         #(e.g. instead of setSize(10) it becomes setSize,10)
         #this means Button's arg 'command' will accept it as a single callable method
         buttonFont=("Comic Sans MS",10)
+        slider=Scale(self, orient="horizontal", resolution=1, from_=1, to=100, command=partial(self.sliderChange,parent))
+        slider.set(parent.squareSize)
+        #slider.config(command=partial(parent.changeSize,slider.get()))
+        slider.place(x=10,y=210)
         Button(self,font=buttonFont, text="10", command=partial(parent.changeSize,10)).place(x=10,y=10)
         Button(self,font=buttonFont, text="25", command=partial(parent.changeSize,25)).place(x=10,y=50)
         Button(self,font=buttonFont, text="50", command=partial(parent.changeSize,50)).place(x=10,y=90)
         Button(self,font=buttonFont, text="75", command=partial(parent.changeSize,75)).place(x=10,y=130)
         Button(self,font=buttonFont, text="100", command=partial(parent.changeSize,100)).place(x=10,y=170)
+    def sliderChange(self,parent,event):
+        parent.changeSize(event)
 
 
 mainWindow=MainWindow()
