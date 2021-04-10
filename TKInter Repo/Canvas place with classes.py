@@ -2,6 +2,7 @@ from tkinter import *
 from functools import partial
 import os
 import pickle
+import time #temp
 
 
 class MainWindow(Tk):
@@ -11,11 +12,10 @@ class MainWindow(Tk):
         self.geometry("1280x1000+390+10")
         self.config(bg="#424B54")
 
-        saveData={}
         info=[]
         self.info=info
 
-        objCount="0"
+        objCount="1"
         self.objCount=objCount
         
         mainFont=font=("Comic Sans MS",15)
@@ -42,42 +42,50 @@ class MainWindow(Tk):
         dynCanvas.place(x=25,y=25)
         self.dynCanvas=dynCanvas
         
-        self.saveData=saveData
 
     def loadData(self):
         if os.path.isfile("savedata.txt"):
             with open("savedata.txt", "rb")as file:
                 self.finalSave=pickle.loads(file.read())
+                            
                 self.deleteCanvas()
+                dynCanvas=Canvas(width=950,height=950, bg="#FAFDF6")
+                dynCanvas.bind("<Button-1>",self.callCreate)
+                dynCanvas.bind("<Button-3>",self.tryDelete)#new subroutine called trydelete
+                dynCanvas.place(x=25,y=25)
+                self.dynCanvas=dynCanvas
+
                 for item in self.finalSave:
                     x=item[0];y=item[1];self.squareSize=item[2]
                     self.info.insert(int(self.objCount), [x,y,self.squareSize])
+                    Square(self.objCount,self.dynCanvas,x,y,self.squareSize)#this bit tries to save the square  
                     self.objCount=int(self.objCount);self.objCount+=1;self.objCount=str(self.objCount)
 
-                    self.saveData[self.objCount]=Square(self.objCount,self.dynCanvas,x,y,self.squareSize)#this bit tries to save the square  
                     size=self.squareSize
                     self.dynCanvas.create_rectangle(x-size,y-size,x+size,y+size,fill="#444554")
 
     def callCreate(self,event):
         self.info.insert(int(self.objCount), [event.x,event.y,self.squareSize])
+        Square(self.objCount,self.dynCanvas,event.x,event.y,self.squareSize)#this bit tries to save the square  
         self.objCount=int(self.objCount);self.objCount+=1;self.objCount=str(self.objCount)
-        self.saveData[self.objCount]=Square(self.objCount,self.dynCanvas,event.x,event.y,self.squareSize)#this bit tries to save the square  
+
         x=event.x;y=event.y;size=self.squareSize
         self.dynCanvas.create_rectangle(x-size,y-size,x+size,y+size,fill="#444554")
 
     def tryDelete(self,event):
         squareFound=False
-        for ID in reversed(self.saveData.keys()):#searches the dictionary keys in reverse order (from newest to oldest)
+        for ID in reversed(self.dynCanvas.find_all()):#searches the dictionary keys in reverse order (from newest to oldest)
             #since only one item can be deleted at a time and it is always the first item to be found this means the
             #newest items (the ones on top of the item stack) will be deleted instead of the item behind it when two squares overlap
-            topx,topy,bottomx,bottomy=self.dynCanvas.coords(self.saveData[ID].ID)
+
+            topx,topy,bottomx,bottomy=self.dynCanvas.coords(ID)
             if event.x>topx and event.x<bottomx and event.y>topy and event.y<bottomy:
-                self.dynCanvas.delete(self.saveData[ID].ID)
+                self.dynCanvas.delete(ID)
                 toBeRemoved=ID;squareFound=True
                 break
         if squareFound==True:
             print("Deleting",toBeRemoved,"...")
-            del self.saveData[toBeRemoved]
+
         
     def openWindow(self):
         window=SizeWindow(self)
@@ -89,20 +97,23 @@ class MainWindow(Tk):
 
     def deleteCanvas(self):
         self.dynCanvas.delete("all")
-        self.saveData={}
         self.objCount="0"
         self.info=[]
 
     def saveQuit(self):
-        if len(self.saveData)>0:
+        if len(self.dynCanvas.find_all())>0:
             with open("savedata.txt", "wb") as file:
                 finalSave=[]
-                for x in self.saveData.keys():
+                for x in self.dynCanvas.find_all():
+   
                     item=int(x)-1
                     finalSave.insert(item, self.info[item])
                 pickle.dump(finalSave, file)
         else:
-            os.remove("savedata.txt")
+            try:
+                os.remove("savedata.txt")
+            except:
+                print("Nothing to remove.")
         quit()
 
 class Square():
