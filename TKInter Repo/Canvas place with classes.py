@@ -52,8 +52,8 @@ class MainWindow(Tk):
         if os.path.isfile("savedata.txt"):
             with open("savedata.txt", "rb")as file:
                 self.finalSave=pickle.loads(file.read())                           
-                self.deleteCanvas()         
-
+                self.deleteCanvas()
+           
                 for item in self.finalSave:
                     x=item[0];y=item[1];self.squareSize=item[2]
                     self.info.insert(int(self.objCount), [x,y,self.squareSize])
@@ -62,6 +62,7 @@ class MainWindow(Tk):
 
                     size=self.squareSize
                     self.dynCanvas.create_rectangle(x-size,y-size,x+size,y+size,fill="#444554")
+                    self.changeSize(size)
 
 
     def getScrollValue(self,scrollbar,wSize,tSize):
