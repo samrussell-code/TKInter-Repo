@@ -29,29 +29,30 @@ class MainWindow(Tk):
         loadButton=Button(self,text="Load",font=mainFont,command=self.loadData)
         loadButton.place(x=1000,y=100)
 
+
         self.squareSize=50
         sizeLabel=Label(self, text="Current Size Is "+str(self.squareSize)+" Points",font=mainFont,relief="groove")
         sizeLabel.place(x=1000,y=250)
         self.sizeLabel=sizeLabel
 
-        dynCanvas=Canvas(width=950,height=950, bg="#FAFDF6")
+        dynCanvas=Canvas(width=1900,height=1900, bg="#FAFDF6",scrollregion=(0,0,1900,1900),confine=True)
         dynCanvas.bind("<Button-1>",self.callCreate)
         dynCanvas.bind("<Button-3>",self.tryDelete)#new subroutine called trydelete
-        dynCanvas.place(x=25,y=25)
-        self.dynCanvas=dynCanvas
+
+
+        hscroll=Scrollbar(self,orient=HORIZONTAL,command=dynCanvas.xview)
+        vscroll=Scrollbar(self,orient=VERTICAL,command=dynCanvas.yview)
+        dynCanvas.config(xscrollcommand=hscroll.set,yscrollcommand=vscroll.set)
+        hscroll.pack(side=BOTTOM,fill=X);vscroll.pack(side=RIGHT,fill=Y)
+        dynCanvas.place(x=25,y=25,height=950,width=950)
+        self.dynCanvas,self.hscroll,self.vscroll=dynCanvas,hscroll,vscroll
         
 
     def loadData(self):
         if os.path.isfile("savedata.txt"):
             with open("savedata.txt", "rb")as file:
-                self.finalSave=pickle.loads(file.read())
-                            
-                self.deleteCanvas()
-                dynCanvas=Canvas(width=950,height=950, bg="#FAFDF6")
-                dynCanvas.bind("<Button-1>",self.callCreate)
-                dynCanvas.bind("<Button-3>",self.tryDelete)#new subroutine called trydelete
-                dynCanvas.place(x=25,y=25)
-                self.dynCanvas=dynCanvas
+                self.finalSave=pickle.loads(file.read())                           
+                self.deleteCanvas()         
 
                 for item in self.finalSave:
                     x=item[0];y=item[1];self.squareSize=item[2]
@@ -62,12 +63,20 @@ class MainWindow(Tk):
                     size=self.squareSize
                     self.dynCanvas.create_rectangle(x-size,y-size,x+size,y+size,fill="#444554")
 
-    def callCreate(self,event):
-        self.info.insert(int(self.objCount), [event.x,event.y,self.squareSize])
-        Square(self.objCount,self.dynCanvas,event.x,event.y,self.squareSize)#this bit tries to save the square  
-        self.objCount=int(self.objCount);self.objCount+=1;self.objCount=str(self.objCount)
 
-        x=event.x;y=event.y;size=self.squareSize
+    def getScrollValue(self,scrollbar,wSize,tSize):
+        a,b=scrollbar.get()
+        value=a+b-wSize/tSize
+        return value
+
+    def callCreate(self,event):
+        relh=self.getScrollValue(self.hscroll,950,1900)
+        relv=self.getScrollValue(self.vscroll,950,1900)
+        x,y,size=event.x+(relh*950),event.y+(relv*950),self.squareSize
+
+        self.info.insert(int(self.objCount), [x,y,size])
+        Square(self.objCount,self.dynCanvas,x,y,size)#this bit tries to save the square  
+        self.objCount=int(self.objCount);self.objCount+=1;self.objCount=str(self.objCount)
         self.dynCanvas.create_rectangle(x-size,y-size,x+size,y+size,fill="#444554")
 
     def tryDelete(self,event):
@@ -75,9 +84,11 @@ class MainWindow(Tk):
         for ID in reversed(self.dynCanvas.find_all()):#searches the dictionary keys in reverse order (from newest to oldest)
             #since only one item can be deleted at a time and it is always the first item to be found this means the
             #newest items (the ones on top of the item stack) will be deleted instead of the item behind it when two squares overlap
-
+            relh=self.getScrollValue(self.hscroll,950,1900)
+            relv=self.getScrollValue(self.vscroll,950,1900)
+            x,y=event.x+(relh*950),event.y+(relv*950)
             topx,topy,bottomx,bottomy=self.dynCanvas.coords(ID)
-            if event.x>topx and event.x<bottomx and event.y>topy and event.y<bottomy:
+            if x>topx and x<bottomx and y>topy and y<bottomy:
                 self.dynCanvas.delete(ID)
                 toBeRemoved=ID;squareFound=True
                 break
@@ -92,9 +103,15 @@ class MainWindow(Tk):
         self.sizeLabel['text'] = "Current Size Is "+str(self.squareSize)+" Points"
 
     def deleteCanvas(self):
-        self.dynCanvas.delete("all")
-        self.objCount="0"
-        self.info=[]
+        self.dynCanvas.delete("all");self.hscroll.destroy();self.vscroll.destroy()
+        dynCanvas=Canvas(width=1920,height=1080, bg="#FAFDF6",scrollregion=(0,0,1900,1900))
+        dynCanvas.config(xscrollcommand=self.hscroll.set,yscrollcommand=self.vscroll.set)
+        dynCanvas.bind("<Button-1>",self.callCreate);dynCanvas.bind("<Button-3>",self.tryDelete)
+        hscroll,vscroll=Scrollbar(self,orient=HORIZONTAL,command=dynCanvas.xview),Scrollbar(self,orient=VERTICAL,command=dynCanvas.yview)
+        hscroll.pack(side=BOTTOM,fill=X);vscroll.pack(side=RIGHT,fill=Y)
+        dynCanvas.config(xscrollcommand=hscroll.set,yscrollcommand=vscroll.set)
+        dynCanvas.place(x=25,y=25,height=950,width=950)
+        self.dynCanvas,self.hscroll,self.vscroll,self.objCount,self.info=dynCanvas,hscroll,vscroll,"0",[]
 
     def saveQuit(self):
         if len(self.dynCanvas.find_all())>0:
