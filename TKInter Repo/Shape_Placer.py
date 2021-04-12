@@ -8,7 +8,7 @@ class MainWindow(Tk):
         super().__init__()
         self.title("Dynamic Canvas")
         self.geometry("1280x1000+390+10")
-        self.config(bg="#424B54")
+        self.config(bg="#262322")
 
         info=[]
         self.info=info
@@ -30,18 +30,17 @@ class MainWindow(Tk):
         loadButton.place(x=1000,y=100)
 
 
-        self.squareSize=50
+        self.squareSize=50 #default square size value
         sizeLabel=Label(self, text="Current Size Is "+str(self.squareSize)+" Points",font=mainFont,relief="groove")
         sizeLabel.place(x=1000,y=250)
         self.sizeLabel=sizeLabel
 
-        dynCanvas=Canvas(width=1900,height=1900, bg="#FAFDF6",scrollregion=(0,0,1900,1900),confine=True)
+        dynCanvas=Canvas(width=1900,height=1900, bg="#F1F5F2",scrollregion=(0,0,1900,1900),confine=True)
         dynCanvas.bind("<Button-1>",self.callCreate)
         dynCanvas.bind("<Button-3>",self.tryDelete)#new subroutine called trydelete
 
-
-        hscroll=Scrollbar(self,orient=HORIZONTAL,command=dynCanvas.xview)
-        vscroll=Scrollbar(self,orient=VERTICAL,command=dynCanvas.yview)
+        #creating the canvas and scrollbars, for now it's copied and pasted, not sure how to make a subroutine when it needs to be in init
+        hscroll,vscroll=Scrollbar(self,orient=HORIZONTAL,command=dynCanvas.xview),Scrollbar(self,orient=VERTICAL,command=dynCanvas.yview)
         dynCanvas.config(xscrollcommand=hscroll.set,yscrollcommand=vscroll.set)
         hscroll.pack(side=BOTTOM,fill=X);vscroll.pack(side=RIGHT,fill=Y)
         dynCanvas.place(x=25,y=25,height=950,width=950)
@@ -58,10 +57,8 @@ class MainWindow(Tk):
                     x=item[0];y=item[1];self.squareSize=item[2]
                     self.info.insert(int(self.objCount), [x,y,self.squareSize])
                     Square(self.objCount,self.dynCanvas,x,y,self.squareSize)#this bit tries to save the square  
-                    self.objCount=int(self.objCount);self.objCount+=1;self.objCount=str(self.objCount)
-
-                    size=self.squareSize
-                    self.dynCanvas.create_rectangle(x-size,y-size,x+size,y+size,fill="#444554")
+                    self.objCount=int(self.objCount);self.objCount+=1;self.objCount=str(self.objCount);size=self.squareSize
+                    self.dynCanvas.create_rectangle(x-size,y-size,x+size,y+size,fill="#F49F0A")
                     self.changeSize(size)
 
 
@@ -78,7 +75,7 @@ class MainWindow(Tk):
         self.info.insert(int(self.objCount), [x,y,size])
         Square(self.objCount,self.dynCanvas,x,y,size)#this bit tries to save the square  
         self.objCount=int(self.objCount);self.objCount+=1;self.objCount=str(self.objCount)
-        self.dynCanvas.create_rectangle(x-size,y-size,x+size,y+size,fill="#444554")
+        self.dynCanvas.create_rectangle(x-size,y-size,x+size,y+size,fill="#F49F0A")
 
     def tryDelete(self,event):
         squareFound=False
@@ -105,7 +102,7 @@ class MainWindow(Tk):
 
     def deleteCanvas(self):
         self.dynCanvas.delete("all");self.hscroll.destroy();self.vscroll.destroy()
-        dynCanvas=Canvas(width=1920,height=1080, bg="#FAFDF6",scrollregion=(0,0,1900,1900))
+        dynCanvas=Canvas(width=1920,height=1080, bg="#F1F5F2",scrollregion=(0,0,1900,1900))
         dynCanvas.config(xscrollcommand=self.hscroll.set,yscrollcommand=self.vscroll.set)
         dynCanvas.bind("<Button-1>",self.callCreate);dynCanvas.bind("<Button-3>",self.tryDelete)
         hscroll,vscroll=Scrollbar(self,orient=HORIZONTAL,command=dynCanvas.xview),Scrollbar(self,orient=VERTICAL,command=dynCanvas.yview)
@@ -140,21 +137,23 @@ class SizeWindow(Toplevel):
         super().__init__(parent)
         self.title("Modify Size")
         self.geometry("130x260+200+20")
-        self.config(bg="#424B54")
+        self.config(bg="#262322")
 
         #partial is useful for calling a method and its arguments in one pair of brackets
         #(e.g. instead of setSize(10) it becomes setSize,10)
         #this means Button's arg 'command' will accept it as a single callable method
-        buttonFont=("Verdana",10)
+        self.buttonFont=("Verdana",10)
         slider=Scale(self, orient="horizontal", resolution=1, from_=1, to=100, command=partial(self.sliderChange,parent))
         slider.set(parent.squareSize)
         #slider.config(command=partial(parent.changeSize,slider.get()))
         slider.place(x=10,y=210)
-        Button(self,font=buttonFont, text="10", command=partial(parent.changeSize,10)).place(x=10,y=10)
-        Button(self,font=buttonFont, text="25", command=partial(parent.changeSize,25)).place(x=10,y=50)
-        Button(self,font=buttonFont, text="50", command=partial(parent.changeSize,50)).place(x=10,y=90)
-        Button(self,font=buttonFont, text="75", command=partial(parent.changeSize,75)).place(x=10,y=130)
-        Button(self,font=buttonFont, text="100", command=partial(parent.changeSize,100)).place(x=10,y=170)
+
+        setupList=[["10",10,10,10],["25",25,10,50],["50",50,10,90],["75",75,10,130],["100",100,10,170]]
+        for x in setupList:
+            self.ButtonSetup(parent,x[0],x[1],x[2],x[3])
+    def ButtonSetup(self,parent,text,size,xpos,ypos):
+        Button(self,font=self.buttonFont,text=text,command=partial(parent.changeSize,size)).place(x=xpos,y=ypos)
+
     def sliderChange(self,parent,event):
         parent.changeSize(event)
 
