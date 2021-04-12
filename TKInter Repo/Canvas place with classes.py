@@ -16,7 +16,7 @@ class MainWindow(Tk):
         objCount="1"
         self.objCount=objCount
         
-        mainFont=font=("Comic Sans MS",15)
+        mainFont=font=("Verdana",15)
         sizeButton=Button(self, text="Size",font=mainFont,command=self.openWindow)
         sizeButton.place(x=1000,y=500)
 
@@ -144,7 +144,7 @@ class SizeWindow(Toplevel):
         #partial is useful for calling a method and its arguments in one pair of brackets
         #(e.g. instead of setSize(10) it becomes setSize,10)
         #this means Button's arg 'command' will accept it as a single callable method
-        buttonFont=("Comic Sans MS",10)
+        buttonFont=("Verdana",10)
         slider=Scale(self, orient="horizontal", resolution=1, from_=1, to=100, command=partial(self.sliderChange,parent))
         slider.set(parent.squareSize)
         #slider.config(command=partial(parent.changeSize,slider.get()))
