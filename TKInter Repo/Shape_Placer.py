@@ -1,10 +1,7 @@
 from tkinter import *
 from functools import partial
-import os
-import pickle
-import Time2
-import random
-import math
+import os,pickle,random,math
+from modules import Time2
 class MainWindow(Tk):
     def __init__(self):
         super().__init__()

@@ -21,7 +21,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Time2.py" />
+    <Compile Include="modules\Time2.py" />
     <Compile Include="Shape_Placer.py" />
     <Compile Include="basic class structures\TKInter Basic place%28%29.py" />
     <Compile Include="basic class structures\TKInter_Basic canvas%28%29.py" />
@@ -29,6 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="basic class structures\" />
+    <Folder Include="modules\" />
     <Folder Include="tests\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
