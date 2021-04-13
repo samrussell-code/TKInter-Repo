@@ -2,7 +2,7 @@ from tkinter import *
 from functools import partial
 import os
 import pickle
-
+import Time2
 class MainWindow(Tk):
     def __init__(self):
         super().__init__()
@@ -46,7 +46,11 @@ class MainWindow(Tk):
         dynCanvas.place(x=25,y=25,height=950,width=950)
         self.dynCanvas,self.hscroll,self.vscroll=dynCanvas,hscroll,vscroll
         
-
+        #timer=Time2.Time2()
+        #timer.debug_mode=True ---testing Time2, my new module
+        #timer.CountTime(10)
+        
+        
     def loadData(self):
         if os.path.isfile("savedata.txt"):
             with open("savedata.txt", "rb")as file:
