@@ -23,11 +23,18 @@ class Time2():
         new=datetime.now()
         year,day,second=new.strftime("%Y"),new.strftime("%j"),new.strftime("%H%M%S")
         year,day,second=int(year),int(day),int(second)
-        if type!="counting":
+        if type=="counting":
+            return year,day,second
+        elif type=="single":
+            try:
+                time=self.StoreTime(year,day,second)
+                return time[1]
+            except:
+                time=self.StoreTime(year,day,second)
+                return time[0]
+        else:
             time=self.StoreTime(year,day,second)
             return time
-        else:
-            return year,day,second
 
     def StoreTime(self,year,day,second): #stores the two most recent calls, so the time between them can be compared.
         if os.path.isfile("times.txt"):

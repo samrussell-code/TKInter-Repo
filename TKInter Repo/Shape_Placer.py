@@ -51,7 +51,9 @@ class MainWindow(Tk):
         timer=Time2.Time2()
         timer.debug_mode=True
         timer.CountTime(1,self.randomnumbers) #just for debugging, times randomnumbers proc for 1 second.
-        
+        year,day,second=timer.GetTime("single")
+        Label(self,text=("Year:",year),font=mainFont).place(x=1000,y=800)
+
     def randomnumbers(self):
         print(random.randint(0,9*pow(10,64)))
         
