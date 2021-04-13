@@ -2,7 +2,9 @@ from tkinter import *
 from functools import partial
 import os
 import pickle
-
+import Time2
+import random
+import math
 class MainWindow(Tk):
     def __init__(self):
         super().__init__()
@@ -46,7 +48,13 @@ class MainWindow(Tk):
         dynCanvas.place(x=25,y=25,height=950,width=950)
         self.dynCanvas,self.hscroll,self.vscroll=dynCanvas,hscroll,vscroll
         
-
+        timer=Time2.Time2()
+        timer.debug_mode=True
+        timer.CountTime(1,self.randomnumbers) #just for debugging, times randomnumbers proc for 1 second.
+        
+    def randomnumbers(self):
+        print(random.randint(0,9*pow(10,64)))
+        
     def loadData(self):
         if os.path.isfile("savedata.txt"):
             with open("savedata.txt", "rb")as file:
