@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>913fae34-60f1-4e97-8620-a0e305671e52</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Shape_Placer.py</StartupFile>
+    <StartupFile>tests\motion.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,6 +22,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="modules\Time2.py" />
+    <Compile Include="tests\motion.py" />
     <Compile Include="Shape_Placer.py" />
     <Compile Include="basic class structures\TKInter Basic place%28%29.py" />
     <Compile Include="basic class structures\TKInter_Basic canvas%28%29.py" />
