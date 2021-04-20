@@ -10,28 +10,27 @@ class GFG(Tk):
         self.x,self.y,self.width,self.height,self.size =0,0,800,800,50
         self.canvas = Canvas(self,width=self.width,height=self.height, bg="#F6F6F4")
         self.rectangle = self.canvas.create_rectangle(self.width/2-self.size,self.height/2-self.size,self.width/2+self.size,self.height/2+self.size,fill="#F49F0A")
-        self.rectangleData = Maths2.Physics()
-        print(self.canvas.coords(self.rectangle))
+        self.rectangleData = Maths2.Physics(self.canvas,self.rectangle)
 
         self.GRAVITY=9.81
         self.speed=100
         self.velocity=0
         self.canvas.pack()
-        self.movement()
+        self.canvas.after(10, self.movement) #calls movement after 10 milliseconds
       
     def touchingEdge(self):
         self.x,self.y=0,0
 
     def movement(self):
-        self.rectangleData.ModifyValues(time_change=0.01,acceleration=self.GRAVITY,initial_velocity=self.velocity)
+
+        self.rectangleData.ModifyValues(acceleration=self.GRAVITY)
         self.rectangleData.VelocityAccelerationTime("velocity")
-        print(self.rectangleData.final_velocity)
+        self.rectangleData.VelocityDistanceAcceleration("distance")
         self.velocity=self.rectangleData.final_velocity
         self.canvas.move(self.rectangle, self.x/100, self.velocity/100) 
         self.rectangleData.PrintData()
-        self.canvas.after(9, self.movement) #calls movement after 10 milliseconds
+        self.canvas.after(10, self.movement) #calls movement after 10 milliseconds
         for x in self.canvas.coords(self.rectangle):
-            print(x)
             if x==self.width or x==self.height or x==0:
                 self.touchingEdge()
       

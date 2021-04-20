@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>913fae34-60f1-4e97-8620-a0e305671e52</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>tests\motion.py</StartupFile>
+    <StartupFile>tests\DVD logo.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -23,6 +23,9 @@
   <ItemGroup>
     <Compile Include="modules\Maths2.py" />
     <Compile Include="modules\Time2.py" />
+    <Compile Include="tests\DVD logo.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="tests\modules\Maths2.py" />
     <Compile Include="tests\modules\Time2.py" />
     <Compile Include="tests\motion.py" />
@@ -40,6 +43,8 @@
     <Folder Include="tests\modules\__pycache__\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="tests\converted.gif" />
+    <Content Include="tests\dvdlogo.png" />
     <Content Include="tests\modules\__pycache__\Time2.cpython-38.pyc" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
