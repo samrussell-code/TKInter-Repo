@@ -28,7 +28,6 @@ class InitWindow(Tk):
                 isValid=True
         if isValid==True:
             self.MoveObject(x,y,magnitude)
-            print("rotating to vector",x,y)
         else:
             self.Rotate(magnitude)
         
@@ -36,14 +35,40 @@ class InitWindow(Tk):
     def MoveObject(self,x,y,magnitude):
         isValid=True
         for coordinate in self.box.coords(self.object):
-            print("checking",coordinate,"while vector",x,y)
             if (coordinate+x>=self.width or coordinate+x>=self.height or coordinate+x<=0) or (coordinate+y>=self.width or coordinate+y>=self.height or coordinate+y<=0):
                 isValid=False
         if isValid==False:
-            time.sleep(0.01)
-            self.Rotate(magnitude)
+            coords=self.box.coords(self.object)
+            newrandom1=random.uniform(0,magnitude)
+            newrandom2=random.uniform(0,magnitude)
+            if coords[0]-magnitude<=0 and coords[1]-magnitude<=0:
+                print("top left")
+                x=(magnitude)+newrandom1;y=(magnitude)+newrandom2
+                self.box.move(self.object, x, y)
+                isValid=True
+                self.box.after(10, self.MoveObject,x,y,magnitude)
+            elif coords[2]+magnitude>=self.width and coords[1]-magnitude<=0:
+                print("top right")
+                x=(-magnitude)-newrandom1;y=(magnitude)+newrandom2
+                self.box.move(self.object, x, y)
+                isValid=True
+                self.box.after(10, self.MoveObject,x,y,magnitude)
+            elif coords[0]-magnitude<=0 and coords[2]+magnitude>=self.height:
+                print("bottom left")
+                x=(magnitude)+newrandom1;y=(-magnitude)-newrandom2
+                self.box.move(self.object, x, y)
+                isValid=True
+                self.box.after(10, self.MoveObject,x,y,magnitude)
+            elif coords[2]+magnitude>=self.width and coords[3]+magnitude>=self.height:
+                print("bottom right")
+                x=(-magnitude)-newrandom1;y=(-magnitude)-newrandom2
+                self.box.move(self.object, x, y)
+                isValid=True
+                self.box.after(10, self.MoveObject,x,y,magnitude)
+            else:
+                time.sleep(0.01)
+                self.Rotate(magnitude)
         else:
-            print("moving object by",x,y)
             self.box.move(self.object, x, y)
             self.box.after(10, self.MoveObject,x,y,magnitude) #calls movement after 10 milliseconds              
             
