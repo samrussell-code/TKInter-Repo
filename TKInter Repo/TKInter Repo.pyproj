@@ -23,6 +23,7 @@
   <ItemGroup>
     <Compile Include="modules\Maths2.py" />
     <Compile Include="modules\Time2.py" />
+    <Compile Include="tests\images test.py" />
     <Compile Include="tests\DVD logo.py">
       <SubType>Code</SubType>
     </Compile>
@@ -44,7 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="tests\converted.gif" />
-    <Content Include="tests\dvdlogo.png" />
     <Content Include="tests\modules\__pycache__\Time2.cpython-38.pyc" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />

@@ -15,6 +15,7 @@ canvas.create_rectangle(10,10,100,100,outline="Black",fill="Grey")
 ###creating an image
 filepath=os.getcwd()
 filepath=str(filepath)+"/image.png"
+print(filepath)
 image=PhotoImage(file=filepath)
 image=image.subsample(2,2) #divides image size by 2 in x and y axis - is limited to only integers so learn PIL for more detailed image modification
 canvas.create_image(150,150,image=image)
