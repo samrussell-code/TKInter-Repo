@@ -1,16 +1,16 @@
 from tkinter import *
 import random
 from math import *
+import winsound
 class InitWindow(Tk):
     def __init__(self):
         super().__init__()
         self.title("DVD Bouncer")
         self.geometry("1000x1000+0+0")
         self.config(bg="#3C3744")
+        self.iconbitmap("assets\\icons\\jack.ico")
         self.x,self.y,self.width,self.height,self.size,self.magnitude =0,0,1000,1000,50,10
-        self.jack=PhotoImage(file="assets\\dvd\\mald.png")
-
-
+        self.wall_hit= 'assets\\audio\\wall_hit.wav'
         self.colour_list=["cigar","cyan","grey","megapurple","pale","purple","sunflower","sunset","teal","tommy_rgb","turq","violet","yellow"]
         self.image_list=[]
         load_percent=0
@@ -19,18 +19,19 @@ class InitWindow(Tk):
         self.load_label=Label(self,text="Loading Assets... "+str(round(load_percent))+"%",font="Verdana",relief="groove")
         self.load_label.place(x=10,y=10)
         self.load_label.update_idletasks()
+        self.jack=PhotoImage(file="assets\\dvd\\mald.png")
+        load_percent+=100/(len(self.colour_list)+1)
         for colour in self.colour_list:
             path='assets\\dvd\\' + colour +'.png' 
             self.image_list.append(PhotoImage(file=path).subsample(10,10))
-            load_percent+=100/len(self.colour_list)
+            load_percent+=100/(len(self.colour_list)+1)
             self.load_label['text'] = "Loading Assets... "+str(round(load_percent))+"%"
             self.load_label.update_idletasks()
         self.load_label.destroy()
 
-
         self.photo_image=random.choice(self.image_list)
         self.object=self.box.create_image(self.width/2,self.height/2,image=self.photo_image)
-        self.Rotate(4)
+        self.MoveObject(sqrt(3),1,2)
 
     def ChangeColour(self,coords):
         self.photo_image=random.choice(self.image_list)
@@ -47,65 +48,61 @@ class InitWindow(Tk):
         finalCoords.append(initCoords[1]+half_height)
         return finalCoords
         
-    def Rotate(self,magnitude):
-
+    def Rotate(self,magnitude,x,y,mirrorX=False,mirrorY=False,side=""):
         hypotenuse=magnitude #this is the magnitude
-        theta=random.uniform(40,50) #this is the angle from x axis that the hypotenuse is aimed at
-        x=hypotenuse*round(cos(theta),5)
-        y=hypotenuse*round(sin(theta),5)
-        isValid=False
-        for coordinate in self.GetCoords(self.box.coords(self.object)):
-            if (coordinate+x<self.width and coordinate+x<self.height and coordinate+x>0) and (coordinate+y<self.width and coordinate+y<self.height and coordinate+y>0):
-                isValid=True
-        if isValid==True:
-            self.ChangeColour(self.box.coords(self.object))
-            self.MoveObject(x,y,magnitude)
-        else:
-            self.Rotate(magnitude)
-        
+        plus_angle=random.uniform(-15,15) #this is the number of degrees to add to angle
+        initial_invert_x,initial_invert_y=False,False
+        theta=degrees(asin(y/hypotenuse))
+        print(theta,x,y,)
+        print(side)
+        if side=="side" and x<0:
+            initial_invert_x=True
+        if side=="bottom" and x<0:
+            initial_invert_x=True
+        if side=="bottom" and y<0:
+            initial_invert_y=True
+        if side=="bottom" and y<0 and x<0:
+            print("hitting the top from right")
+            initial_invert_x,initial_invert_y=True,False
+        if side=="bottom" and y<0 and x>0:
+            print("hitting the top from left")
+            mirrorY=False
+            
+      #  if side=="bottom" and x<0:
+       #     initial_invert_x=True
 
+
+        x=magnitude*cos(radians(theta+plus_angle))
+        y=magnitude*sin(radians(theta+plus_angle))
+        if initial_invert_x==True:
+            x=-x
+        if initial_invert_y==True:
+            y=-y
+        if mirrorX==True:
+            x=-x
+        if mirrorY==True:
+            y=-y
+        print(theta,x,y)
+        winsound.PlaySound(self.wall_hit,winsound.SND_ASYNC)
+        return x,y
+
+    
     def MoveObject(self,x,y,magnitude):
-        isValid=True
-        for coordinate in self.GetCoords(self.box.coords(self.object)):
-            if (coordinate+x>=self.width or coordinate+x>=self.height or coordinate+x<=0) or (coordinate+y>=self.width or coordinate+y>=self.height or coordinate+y<=0):
-                isValid=False
-        if isValid==False:
-            coords=self.GetCoords(self.box.coords(self.object))
-            newrandom1=random.uniform(0,sqrt(magnitude))
-            newrandom2=random.uniform(0,sqrt(magnitude))
-            if coords[0]-magnitude<=0 and coords[1]-magnitude<=0:
-                #print("top left")
-                self.box.move(self.object, newrandom1,newrandom2)
-                isValid=True
-                self.box.after(10, self.MoveObject,x,y,magnitude)
-                self.ChangeColour(self.box.coords(self.object))
-                self.box.itemconfig(self.object,image=self.jack)
-            elif coords[2]+magnitude>=self.width and coords[1]-magnitude<=0:
-                #print("top right")
-                x=(-magnitude)-newrandom1;y=(magnitude)+newrandom2
-                self.box.move(self.object, x, y)
-                isValid=True
-                self.box.after(10, self.MoveObject,x,y,magnitude)
-                self.ChangeColour(self.box.coords(self.object))
-                self.box.itemconfig(self.object,image=self.jack)
-            elif coords[0]-magnitude<=0 and coords[3]+magnitude>=self.height:
-                #print("bottom left")
-                x=(magnitude)+newrandom1;y=(-magnitude)-newrandom2
-                self.box.move(self.object, x, y)
-                isValid=True
-                self.box.after(10, self.MoveObject,x,y,magnitude)
-                self.ChangeColour(self.box.coords(self.object))
-                self.box.itemconfig(self.object,image=self.jack)
-            elif coords[2]+magnitude>=self.width and coords[3]+magnitude>=self.height:
-               #print("bottom right")
-                x=(-magnitude)-newrandom1;y=(-magnitude)-newrandom2
-                self.box.move(self.object, x, y)
-                isValid=True
-                self.box.after(10, self.MoveObject,x,y,magnitude)
-                self.ChangeColour(self.box.coords(self.object))
-                self.box.itemconfig(self.object,image=self.jack)
-            else:
-                self.Rotate(magnitude)
+        current_coords=self.GetCoords(self.box.coords(self.object))
+        if current_coords[2]>=self.width or current_coords[0]<=0:
+            print("right or left")
+            x,y=self.Rotate(magnitude,x,y,mirrorX=True,mirrorY=False,side="side")
+            self.box.move(self.object, x, y)
+            self.ChangeColour(self.box.coords(self.object))
+            self.box.after(10, self.MoveObject,x,y,magnitude)
+            #work out the y value using the opposite y adjacent x
+        elif current_coords[3]>self.height or current_coords[1]<=0:
+            print("bottom or top")
+            x,y=self.Rotate(magnitude,x,y,mirrorX=False,mirrorY=True,side="bottom")
+            self.box.move(self.object, x, y)
+            self.ChangeColour(self.box.coords(self.object))
+            self.box.after(10, self.MoveObject,x,y,magnitude)
+            
         else:
             self.box.move(self.object, x, y)
             self.box.after(10, self.MoveObject,x,y,magnitude) #calls movement after 10 milliseconds              
