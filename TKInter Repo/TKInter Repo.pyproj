@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>913fae34-60f1-4e97-8620-a0e305671e52</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>basic class structures\grid experiment.py</StartupFile>
+    <StartupFile>NodeStack\initial_idea.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -26,6 +26,9 @@
     </Compile>
     <Compile Include="modules\Maths2.py" />
     <Compile Include="modules\Time2.py" />
+    <Compile Include="NodeStack\initial_idea.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="tests\images test.py" />
     <Compile Include="tests\DVD logo.py">
       <SubType>Code</SubType>
@@ -41,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="basic class structures\" />
+    <Folder Include="NodeStack\" />
     <Folder Include="modules\" />
     <Folder Include="tests\" />
     <Folder Include="tests\modules\" />
