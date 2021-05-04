@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>913fae34-60f1-4e97-8620-a0e305671e52</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>tests\DVD logo.py</StartupFile>
+    <StartupFile>basic class structures\grid experiment.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,6 +21,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="basic class structures\grid experiment.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="modules\Maths2.py" />
     <Compile Include="modules\Time2.py" />
     <Compile Include="tests\images test.py" />
