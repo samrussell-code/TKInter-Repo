@@ -1,0 +1,50 @@
+[[0,3,7,5][3,0,1,3][7,1,0,8][5,3,8,0]]
+      A0        B1          C2       D3
+
+example list, used in this notepad doc
+list[0][0] is the distance between A0 and A0 (0)
+list[2][3] is the distance between C2 and D3 (8)
+
+start with A, or list[0]
+create a checklist containing list[0]
+pick smallest in checklist, take pos checklist[unknown][x]
+set to zero for values of list[n][x]
+append list[x] to checklist as checklist[new position][list[x]]
+pick smallest in checklist and repeat
+
+starting with list[unknown]
+checklist=[[0,3,7,5]]
+since A0, list[unknown]=0
+0 list every[0] and 0[0]
+
+min=3
+unknown=0
+x=1
+DRAW A0,B1
+0 list[every][1]and[1][0]
+[[0,0,7,5][0,0,1,3][0,0,0,8][0,0,8,0]]
+append checklist with x=[[0,0,7,5][0,0,1,3]]
+
+min=1
+unknown=1
+x=2
+0 list[every][2]and[2][1]
+DRAW B1,C2
+[[0,0,0,5][0,0,0,3][0,0,0,8][0,0,0,0]]
+append checklist with x=[[0,0,0,5][0,0,0,3][0,0,0,8]]
+
+min=3
+unknown=1
+x=3
+0 list[every][3]and[3][1]
+DRAW B1,D3
+[[0,0,0,0][0,0,0,0][0,0,0,0][0,0,0,0]]
+append checklist with x=[[0,0,0,0][0,0,0,0][0,0,0,0][0,0,0,0]]
+
+if all items = 0
+end task
+
+we have
+A - B - C
+     |
+     D
