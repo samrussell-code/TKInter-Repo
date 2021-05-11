@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>913fae34-60f1-4e97-8620-a0e305671e52</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>NodeStack\initial_idea.py</StartupFile>
+    <StartupFile>tests\discrete.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -31,6 +31,9 @@
     </Compile>
     <Compile Include="tests\images test.py" />
     <Compile Include="tests\DVD logo.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tests\discrete.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="tests\modules\Maths2.py" />
