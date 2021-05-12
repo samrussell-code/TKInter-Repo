@@ -7,7 +7,7 @@ class MainWindow(Tk):
         super().__init__()
         point_list=[]
         WIDTH,HEIGHT=1000,1000
-        self.POSITION_NUMBER=250
+        self.POSITION_NUMBER=8
         self.geometry("1200x1000+10+10")
         self.title("Graphs")
         self.config(bg="Black")
@@ -26,6 +26,7 @@ class MainWindow(Tk):
             pos_list.append([canvas.coords(x)[0],canvas.coords(x)[1]])
         pos_list.sort()
         self.distance_table=self.GetDistanceTable(pos_list,canvas)
+        canvas.delete("all")
         lines=self.MainPrimming(self.distance_table)
         self.DrawLines(lines,pos_list,canvas)
 
@@ -63,11 +64,10 @@ class MainWindow(Tk):
             row=checklist.index(smallest_num) 
             column=row//self.POSITION_NUMBER
             row=row-column*self.POSITION_NUMBER
-            #print("ROW",row,"COLUMN",column,"smallest_num",round(smallest_num))
             distance_table[row*self.POSITION_NUMBER+column]=696969
             for x in range(0,len(distance_table)//self.POSITION_NUMBER):
                 if row==0:
-                    distance_table[column]=696969
+                    distance_table[x]=696969
                 else:
                     distance_table[x*self.POSITION_NUMBER+row]=696969
             for x in range(0,len(checklist)//self.POSITION_NUMBER):
@@ -78,7 +78,6 @@ class MainWindow(Tk):
             lines_to_draw.append([row,column])
             for item in distance_table[self.POSITION_NUMBER:2*self.POSITION_NUMBER]:
                 checklist[row*self.POSITION_NUMBER:(row+1)*self.POSITION_NUMBER]=distance_table[row*self.POSITION_NUMBER:(row+1)*self.POSITION_NUMBER]
-       # print(lines_to_draw)
         return lines_to_draw
     
     def EqualChecker(self,list_to_check):
@@ -92,20 +91,8 @@ class MainWindow(Tk):
        self.destroy()
        self.__init__()
 
-    def BoggedClosest(self,pos_list,canvas):
-        for x,y in pos_list:
-            a,b=canvas.coords(canvas.find_closest(x,y,halo=1000))[0],canvas.coords(canvas.find_closest(x,y,halo=1000))[1]
-            print(a,b,x,y)
-            canvas.create_line(x,y,a,b)
-
-    def BunchOfLines(self,pos_list,canvas):
-        for x,y in pos_list:
-            for a,b in pos_list:
-                canvas.create_line(x,y,a,b)
-
     def RandomPoint(self,canvas,point_list,width,height):
         generated_point=random.randint(0,width),random.randint(0,height)
         canvas.create_line(generated_point[0],generated_point[1],generated_point[0]+1,generated_point[1]+1)
 window=MainWindow()
 window.mainloop()
-
