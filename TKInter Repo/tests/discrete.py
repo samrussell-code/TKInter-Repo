@@ -7,7 +7,7 @@ class MainWindow(Tk):
         super().__init__()
         point_list=[]
         WIDTH,HEIGHT=1000,1000
-        self.POSITION_NUMBER=8
+        self.POSITION_NUMBER=250
         self.geometry("1200x1000+10+10")
         self.title("Graphs")
         self.config(bg="Black")
@@ -31,10 +31,18 @@ class MainWindow(Tk):
         self.DrawLines(lines,pos_list,canvas)
 
     def DrawLines(self,line_list,pos,canvas):
+        maximum=0
         for a,b in line_list:
             Label(self,text=a,font=self.small_font,bg="#1C1C1C",fg="#FDFFFC").place(x=pos[a][0]-4,y=pos[a][1]-4)
             Label(self,text=b,font=self.small_font,bg="#1C1C1C",fg="#FDFFFC").place(x=pos[b][0]-4,y=pos[b][1]-4)
             canvas.create_line(pos[a][0],pos[a][1],pos[b][0],pos[b][1],fill="#FDFFFC")
+            if a>b and a>maximum:
+                maximum=a
+            elif b>a and b>maximum:
+                maximum=b
+        if maximum<249:
+            self.Reset()
+        
 
     def GetDistanceTable(self,pos_list,canvas):
         distance_table=[]
