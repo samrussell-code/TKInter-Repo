@@ -12,6 +12,7 @@ class MainWindow(Tk):
         self.title("Graphs")
         self.config(bg="Black")
         self.main_font=("Verdana",20)
+        self.small_font=("Verdana",8)
         self.main_canvas=Canvas(width=WIDTH,height=HEIGHT,bg="#1C1C1C")
         self.main_canvas.place(x=0,y=0)
         self.ResetButton=Button(text="Reset",font=self.main_font,command=self.Reset)
@@ -30,8 +31,10 @@ class MainWindow(Tk):
 
     def DrawLines(self,line_list,pos,canvas):
         for a,b in line_list:
+            Label(self,text=a,font=self.small_font,bg="#1C1C1C",fg="#FDFFFC").place(x=pos[a][0]-4,y=pos[a][1]-4)
+            Label(self,text=b,font=self.small_font,bg="#1C1C1C",fg="#FDFFFC").place(x=pos[b][0]-4,y=pos[b][1]-4)
             canvas.create_line(pos[a][0],pos[a][1],pos[b][0],pos[b][1],fill="#FDFFFC")
-    
+
     def GetDistanceTable(self,pos_list,canvas):
         distance_table=[]
         for x,y in pos_list:
