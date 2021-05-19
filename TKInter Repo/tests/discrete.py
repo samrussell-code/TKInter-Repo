@@ -40,8 +40,9 @@ class MainWindow(Tk):
                 maximum=a
             elif b>a and b>maximum:
                 maximum=b
-        if maximum<249:
+        if maximum!=249:
             self.Reset()
+        print("max",maximum)
         
 
     def GetDistanceTable(self,pos_list,canvas):

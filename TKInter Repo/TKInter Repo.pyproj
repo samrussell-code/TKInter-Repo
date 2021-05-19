@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>913fae34-60f1-4e97-8620-a0e305671e52</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>tests\discrete.py</StartupFile>
+    <StartupFile>tests\circle_pusher.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -34,6 +34,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="tests\discrete.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tests\circle_pusher.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="tests\modules\Maths2.py" />
