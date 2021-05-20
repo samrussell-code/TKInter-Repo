@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>913fae34-60f1-4e97-8620-a0e305671e52</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>tests\circle_pusher.py</StartupFile>
+    <StartupFile>tests\circle pusher mouse stats\stats.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -27,6 +27,12 @@
     <Compile Include="modules\Maths2.py" />
     <Compile Include="modules\Time2.py" />
     <Compile Include="NodeStack\initial_idea.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tests\circle pusher mouse stats\module1.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tests\circle pusher mouse stats\stats.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="tests\images test.py" />
@@ -55,6 +61,7 @@
     <Folder Include="tests\" />
     <Folder Include="tests\modules\" />
     <Folder Include="tests\modules\__pycache__\" />
+    <Folder Include="tests\circle pusher mouse stats\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="tests\converted.gif" />

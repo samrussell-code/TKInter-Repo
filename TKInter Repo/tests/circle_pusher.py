@@ -9,7 +9,7 @@ class SimulationWindow(Tk):
         self.geometry("1500x1000+10+5")
         self.config(bg='#231B1B')
         mainfont=('Verdana',20)
-        self.x,self.y,self.width,self.height,self.size,self.circle_count,self.range,self.friction,self.move_cache,self.power=0,0,1000,1000,20,10,1,1,{},800
+        self.x,self.y,self.width,self.height,self.size,self.circle_count,self.range,self.friction,self.move_cache,self.power=0,0,1000,1000,20,50,1,1,{},800
         self.labeltext='Friction: '+str(round(int(self.friction),3))
         self.rangetext='Range: '+str(round(int(self.range)))
         self.friction_label=Label(text=self.labeltext,font=mainfont)
