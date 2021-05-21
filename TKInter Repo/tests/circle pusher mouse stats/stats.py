@@ -35,9 +35,11 @@ class SimulationWindow(Tk):
         velocity=0
         momentum=0
         mass=5
+        work=0
         while True:
             oldvelocity=velocity
             oldmomentum=momentum
+            oldwork=work
             time.sleep(self.TIME)
             distance=(sqrt(((self.mY-self.oldy)**2)+((self.mX-self.oldx)**2)))/1000
             #1m is 100px
@@ -46,6 +48,9 @@ class SimulationWindow(Tk):
             force=mass*acceleration
             momentum=mass*velocity
             impulse=momentum-oldmomentum
+            work=force*distance
+            power=force*velocity
+            Ek=0.5*(mass)*((velocity)**2)
             self.oldy,self.oldx=self.mY,self.mX
             if debug_mode==True:
                 print(f'''
@@ -55,6 +60,9 @@ class SimulationWindow(Tk):
                 Force={round(force,2)}N
                 Momentum={round(momentum,2)}kgms^-1
                 Impulse={round(impulse,2)}Ns
+                Work Done={round(work,2)}J
+                Energy (Kinetic)={round(Ek,2)}J
+                Power={round(power,2)}W
                 ''')
 
     
